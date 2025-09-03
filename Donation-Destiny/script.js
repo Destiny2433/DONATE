@@ -160,6 +160,11 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 3000);
 }
 
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 if (form) {
   form.addEventListener("submit", e => {
     e.preventDefault();
@@ -167,14 +172,19 @@ if (form) {
     const email = form.querySelector("input[type='email']").value.trim();
     const message = form.querySelector("textarea").value.trim();
 
-    if (!name ||!email ||!message) {
+    if (!name || !email || !message) {
       showToast("Please fill out all fields.");
       return;
-}
+    }
 
-    showToast("Thank you! Your message has been sent.");
-    form.reset();
-});
+    if (!isValidEmail(email)) {
+      showToast("Please enter a valid email address.");
+      return;
+    }
+
+    showToast("Sending your message...");
+    form.submit();
+  });
 }
 
 // Rotating testimonials
